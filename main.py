@@ -144,7 +144,7 @@ def CarDataTable():
             html_columns=[11],
         )
         .classes("min-h-max")
-        .style("height: 80vh;")
+        .style("min-height: 85vh;")
     )
 
     # my_table.call_api_method("setDomLayout", "autoHeight")
@@ -153,7 +153,7 @@ def CarDataTable():
     return my_table
 
 
-with ui.row().classes("w-screen"):
+with ui.row().classes("w-screen h-screen"):
     with ui.column().classes(
         "items-left justify-left pt-24 h-screen w-2/12"
     ) as data_input:
