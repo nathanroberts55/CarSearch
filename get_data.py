@@ -22,12 +22,12 @@ class UsedCar:
     mileage: str = 0
 
 
-def get_vehicle_data(make, zip, radius, priceMax, yearMin):
+def get_vehicle_data(make, zip, radius, mileageMax, priceMax, yearMin):
     try:
         logger.info(
-            f"Making Request to Carfax API for - Make: {make}, Zip: {zip}, Radius: {radius}, Max Price: {priceMax}, Min Year: {yearMin},"
+            f"Making Request to Carfax API for - Make: {make}, Zip: {zip}, Radius: {radius}, Max Price: {priceMax}, Max Mileage: {mileageMax}, Min Year: {yearMin},"
         )
-        url = f"https://helix.carfax.com/search/v2/vehicles?zip={zip}&radius={radius}&sort=BEST&make={make}&certified=false&vehicleCondition=USED&bodyType=SUV&mileageMax=100000&priceMax={priceMax}&yearMin={yearMin}&dynamicRadius=false&tpQualityThreshold=150&tpPositions=1%2C2%2C3&tpValueBadges=GOOD%2CGREAT&urlInfo=Used-Honda-SUVs_m11_bt8&bodytypes=SUV"
+        url = f"https://helix.carfax.com/search/v2/vehicles?zip={zip}&radius={radius}&sort=BEST&make={make}&certified=false&vehicleCondition=USED&bodyType=SUV&mileageMax={mileageMax}&priceMax={priceMax}&yearMin={yearMin}&dynamicRadius=false&tpQualityThreshold=150&tpPositions=1%2C2%2C3&tpValueBadges=GOOD%2CGREAT&urlInfo=Used-Honda-SUVs_m11_bt8&bodytypes=SUV"
         response = requests.get(url)
     except Exception as e:
         logger.exception(
@@ -40,15 +40,21 @@ def get_car_df(
     makes: list = ["Honda", "Toyota", "Subaru", "Lexus", "Acura"],
     zip: str = "22030",
     radius: int = 50,
-    priceMax=17000,
-    yearMin=2009,
+    mileageMax: int = 100000,
+    priceMax: int = 17000,
+    yearMin: int = 2009,
 ):
     all_listings = []
     cars = []
 
     for make in makes:
         data = get_vehicle_data(
-            make=make, zip=zip, radius=radius, priceMax=priceMax, yearMin=yearMin
+            make=make,
+            zip=zip,
+            radius=radius,
+            mileageMax=mileageMax,
+            priceMax=priceMax,
+            yearMin=yearMin,
         )
         all_listings.extend(data["listings"])
 

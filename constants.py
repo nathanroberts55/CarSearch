@@ -1,1 +1,11 @@
-MAKES_LIST = ["Honda", "Toyota", "Subaru", "Lexus", "Acura", "Ford", "Mazda"]
+MAKES_LIST = [
+    "Honda",
+    "Toyota",
+    "Subaru",
+    "Lexus",
+    "Acura",
+    "Kia",
+    "Hyundai",
+    "Ford",
+    "Mazda",
+]

@@ -34,19 +34,20 @@ def set_data():
     global car_data_list, car_data_df
     try:
         logger.info(
-            f"Updating Data with New Inputs - Makes: {makes.value}, Zip: {zip.value}, Radius: {radius.value}, Max Price: {maxPrice.value}, Min Year: {minYear.value}"
+            f"Updating Data with New Inputs - Makes: {makes.value}, Zip: {zip.value}, Radius: {radius.value}, Max Mileage: {maxMileage.value}, Max Price: {maxPrice.value}, Min Year: {minYear.value}"
         )
         car_data_list, car_data_df = get_car_df(
             makes=makes.value,
             zip=zip.value,
             radius=radius.value,
+            mileageMax=int(maxMileage.value),
             priceMax=maxPrice.value,
             yearMin=minYear.value,
         )
         CarDataTable.refresh()
     except Exception as e:
         logger.exception(
-            f"Was unable to Update Data with Input- Makes: {makes.value}, Zip: {zip.value}, Radius: {radius.value}, Max Price: {maxPrice.value}, Min Year: {minYear.value}, Exception: {e}"
+            f"Was unable to Update Data with Input- Makes: {makes.value}, Zip: {zip.value}, Radius: {radius.value},Max Mileage: {maxMileage.value}, Max Price: {maxPrice.value}, Min Year: {minYear.value}, Exception: {e}"
         )
 
 
@@ -146,34 +147,36 @@ def CarDataTable():
         .style("height: 80vh;")
     )
 
-    my_table.call_api_method("setDomLayout", "autoHeight")
+    # my_table.call_api_method("setDomLayout", "autoHeight")
     my_table.call_api_method("setRowCount", 50)
 
     return my_table
 
 
-with ui.row().classes("justify-center"):
-    with ui.row().classes("w-full justify-center"):
-        ui.label("Carfax Data Scrape").classes("text-4xl")
-
-    with ui.row().classes("items-center justify-center w-full") as data_input:
+with ui.row().classes("w-screen"):
+    with ui.column().classes(
+        "items-left justify-left pt-24 h-screen w-2/12"
+    ) as data_input:
+        ui.label("Data Filters").classes("text-2xl font-mono")
         makes = ui.select(
             MAKES_LIST, multiple=True, value=MAKES_LIST[:5], label="Makes"
-        ).classes("w-64")
-        zip = ui.input(label="Zip Code", value="22030")
-        radius = ui.number(label="Radius", value=50)
-        maxPrice = ui.number(label="Max Price", value=17000)
-        minYear = ui.number(label="Model Year Minimum", min=2004, max=2023, value=2008)
+        ).classes("w-full")
+        zip = ui.input(label="Zip Code", value="22030").classes("w-full")
+        radius = ui.number(label="Radius", value=50).classes("w-full")
+        maxMileage = ui.number(label="Max Mileage", value=100000).classes("w-full")
+        maxPrice = ui.number(label="Max Price", value=17000).classes("w-full")
+        minYear = ui.number(
+            label="Model Year Minimum", min=2004, max=2023, value=2008
+        ).classes("w-full")
+        with ui.row().classes("justify-center w-full") as submit_button:
+            ui.button("Export", on_click=lambda: convert_to_excel(car_data_df))
+            ui.button("Update", on_click=set_data, color="green")
 
-    with ui.row().classes("justify-center w-full") as submit_button:
-        ui.button(
-            "Submit",
-            on_click=set_data,
-        )
+    with ui.column().classes("justify-center items-center w-4/5") as data_view:
+        ui.label("Carfax Data Scrape").classes("text-4xl font-mono")
+        ui.label("Cars for Sale").classes("text-2xl font-mono")
 
-    ui.label("Cars for Sale").classes("text-4xl")
-    CarDataTable()
+        CarDataTable()
 
-    ui.button("Export", on_click=lambda: convert_to_excel(car_data_df))
 
 ui.run(title="Custom Carfax Search")
