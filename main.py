@@ -153,9 +153,12 @@ def CarDataTable():
     return my_table
 
 
+with ui.header().classes("w-screen bg-slate-500"):
+    ui.label("Carfax Data Scrape").classes("text-4xl font-mono")
+
 with ui.row().classes("w-screen h-screen"):
     with ui.column().classes(
-        "items-left justify-left pt-24 h-screen w-2/12"
+        "items-left justify-left pt-10 h-screen w-2/12"
     ) as data_input:
         ui.label("Data Filters").classes("text-2xl font-mono")
         makes = ui.select(
@@ -173,7 +176,6 @@ with ui.row().classes("w-screen h-screen"):
             ui.button("Update", on_click=set_data, color="green")
 
     with ui.column().classes("justify-center items-center w-4/5") as data_view:
-        ui.label("Carfax Data Scrape").classes("text-4xl font-mono")
         ui.label("Cars for Sale").classes("text-2xl font-mono")
 
         CarDataTable()
